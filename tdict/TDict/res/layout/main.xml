@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android=
+"http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:scrollbars="vertical"
+android:scrollbarSize="400px"
+>
+<LinearLayout
+android:orientation="vertical"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+>
+<TableLayout xmlns:android=
+	"http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+>
+<TableRow>
+<ImageButton
+	android:id="@+id/btnClear"
+	android:layout_width="53px"
+	android:layout_height="53px"
+	android:src="@drawable/clear"
+/> 
+<EditText
+	android:id="@+id/word"
+	android:layout_width="215px"
+	android:layout_height="53px"
+	android:textSize="20px"
+	android:singleLine="true"
+	android:hint="word search"
+/>
+<ImageButton
+	android:id="@+id/btnSpeak"
+	android:layout_width="53px"
+	android:layout_height="53px"
+	android:src="@drawable/audio"
+
+/> 
+</TableRow>
+</TableLayout>
+<AbsoluteLayout xmlns:android=
+	"http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:scrollbars="vertical"
+	>
+<TextView  
+	android:id="@+id/textView"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+    android:textSize="20px"
+    android:textColor="#ff80f08f"
+    android:scrollbars="vertical" 
+
+  
+/>
+<ListView android:id="@+id/listResult"
+	android:layout_width="fill_parent"
+    android:layout_height="360px"
+/>
+</AbsoluteLayout>
+</LinearLayout>
+</ScrollView>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android=
+"http://schemas.android.com/apk/res/android"
+android:orientation="vertical"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+>
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+    android:scrollbars="vertical" 
+    android:text="@string/about_text"
+    android:textSize="16px"
+/>
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+    android:scrollbars="vertical" 
+    android:textColor="#ffcc00"
+    android:text=" (http://tri-vision-vn.com)"
+    android:textColorLink="#ffcc00"
+    android:textSize="16px"
+    android:autoLink="web"
+/>
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+    android:scrollbars="vertical" 
+    android:text="@string/license_about"
+    android:textSize="16px"
+/>
+</LinearLayout>
