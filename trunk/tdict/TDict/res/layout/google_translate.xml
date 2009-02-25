@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android=
+"http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:scrollbars="vertical"
+android:scrollbarSize="400px"
+>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+>
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+    android:paddingTop="5px"
+    android:layout_marginLeft="8px"
+    android:textColor="#00ffff"
+    android:text="Language Source"
+/>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+>
+<TableRow>
+<Spinner
+  android:id="@+id/spnSourceLanguages"
+  android:layout_width="200dip"
+  android:layout_height="fill_parent"
+  android:layout_marginLeft="5px"
+  android:layout_centerVertical="true"
+   
+/>
+<ImageButton
+	android:id="@+id/btnAudioConvert"
+	android:layout_width="55px"
+	android:layout_height="fill_parent"
+    android:src="@drawable/audio"
+/>
+
+</TableRow>
+</TableLayout>
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	
+>
+<TableRow>
+<EditText
+	android:id="@+id/edtSourceInput"
+	android:layout_width="310px"
+	android:layout_height="100px"
+	android:layout_marginLeft="5px"
+	android:scrollbars="vertical"
+	android:textColor="#ff0000"
+	android:hint="@string/input"
+/>
+
+</TableRow>
+</TableLayout>
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+    android:paddingTop="5px"
+    android:layout_marginLeft="8px"
+    android:textColor="#00ffff"
+    android:text="Language Destination"
+/>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:paddingTop="5px"
+>
+<TableRow>
+
+<Spinner
+  android:id="@+id/spnDestinationLanguages"
+  android:layout_width="200dip"
+  android:layout_height="fill_parent"
+  android:layout_centerVertical="true"
+  android:layout_marginLeft="5px"
+/>
+
+<ImageButton
+	android:id="@+id/btnAudioReConvert"
+	android:layout_width="55px"
+	android:layout_height="fill_parent"
+    android:src="@drawable/audio"
+/>
+</TableRow>
+</TableLayout>
+<TableLayout xmlns:android=
+	"http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:paddingTop="5px"
+>
+<TableRow>
+<EditText
+	android:id="@+id/edtDestinationInput"
+	android:layout_width="310px"
+	android:layout_height="100px"
+	android:layout_marginLeft="5px"
+	android:scrollbars="vertical"
+	android:textColor="#0000ff"
+	android:hint="@string/output"
+/>
+</TableRow>
+</TableLayout>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:paddingTop="5px"
+>
+<TableRow  android:paddingLeft="5px">
+<Button
+	android:id="@+id/btnConvert"
+	android:layout_width="104px"
+	android:layout_height="fill_parent"
+	android:textColor="#bb3322"
+	android:text="Translate"
+	
+/> 
+
+<Button
+	android:id="@+id/btnReConvert"
+	android:layout_width="104px"
+	android:layout_height="fill_parent"
+	android:textColor="#bb3322"
+	android:text="Reverse"
+/>
+
+<Button
+	android:id="@+id/btnGoogleClear"
+	android:layout_width="104px"
+	android:layout_height="fill_parent"
+	android:textColor="#bb3322"
+	android:text="Clear"
+/>
+</TableRow>
+</TableLayout>
+
+</LinearLayout>
+</ScrollView> 

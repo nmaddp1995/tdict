@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, StarDict</string>
+    <string name="app_name">TDict</string>
+    <string name="no_files">This directory is empty</string>
+    <string name="to_top">[Back to Top]</string>
+    <string name="format_file_data">.db</string>
+    <string name="path_file_data">/sdcard/AndroidDict/db</string> 
+    <string name="about_text"> 
+     	\n
+         TDict version 1.0 \n\n 
+          Copyright 2009 by the TRI-VISION SC.
+    
+	</string>
+	<string name="license_about"> 
+		\n
+     	This program is free software; you can redistribute it and/or modify
+		it under the terms of the GNU General Public License as published by
+		the Free Software Foundation.
+	</string>
+	<string name="no_database">\n TDict has no data!\n \n Please copy file data to directory /sdcard/AndroidDict/db and restart it.</string>
+	<string name="input">Text Input</string>
+	<string name="output">Text Output</string>
+</resources>
