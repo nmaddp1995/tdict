@@ -5,7 +5,7 @@
     <string name="no_files">This directory is empty</string>
     <string name="to_top">[Back to Top]</string>
     <string name="format_file_data">.db</string>
-    <string name="path_file_data">/sdcard/AndroidDict/db</string> 
+    <string name="path_file_data">/sdcard/TDict/db</string> 
     <string name="about_text"> 
      	\n
          TDict version 1.0 \n\n 
