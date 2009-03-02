@@ -29,6 +29,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
@@ -38,9 +39,6 @@ public class ConvertData extends JFrame
 {
 	// Variables declaration
 	int count=0;
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JLabel lblIndexFilePath;
 	private JLabel lblDictFilePath;
@@ -48,11 +46,18 @@ public class ConvertData extends JFrame
 	private JTextField txtSourceFilePath;
 	private JTextField txtDbFilePath;
 	private JButton btnPerform;
+	private JButton btnStop;
 	private JButton btnIndexFileSelect;
 	private JButton btnDictFileSelect;
 	private JPanel contentPane;
 	private JFileChooser fc;
-
+	private String messageResult;
+	private int start;
+	private int countWord;
+	private int numberWord;
+	int result;
+	boolean stop;
+	
 	// End of variables declaration
 	
 	public ConvertData()
@@ -76,6 +81,7 @@ public class ConvertData extends JFrame
 		txtSourceFilePath = new JTextField();
 		txtDbFilePath = new JTextField();
 		btnPerform = new JButton();
+		btnStop=new JButton();
 		btnIndexFileSelect=new JButton();
 		btnDictFileSelect=new JButton();
 	   	contentPane = (JPanel)this.getContentPane();
@@ -83,60 +89,47 @@ public class ConvertData extends JFrame
 	    fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
      	//lblIndexFilePath
 		lblDisplayProcess.setHorizontalAlignment(SwingConstants.LEFT);
-		lblDisplayProcess.setForeground(new Color(255, 0, 0));
 		
 		//lblIndexFilePath
 		lblDictFilePath.setHorizontalAlignment(SwingConstants.LEFT);
-		lblIndexFilePath.setForeground(new Color(0, 0, 255));
 		lblIndexFilePath.setText(" Path store source dict");
 		
 		//lblDictFilePath
-	
 		lblDictFilePath.setHorizontalAlignment(SwingConstants.LEFT);
-		lblDictFilePath.setForeground(new Color(0, 0, 255));
 		lblDictFilePath.setText(" Path store database");
 		
 		// txtSourceFilePath
 		txtSourceFilePath.setForeground(new Color(0, 0, 255));
-		txtSourceFilePath.setSelectedTextColor(new Color(0, 0, 255));
 		txtSourceFilePath.setToolTipText("Enter path store source dict");
-		txtSourceFilePath.addActionListener(new ActionListener() {
-		
-		public void actionPerformed(ActionEvent e)
-		
-		{
-					;
-		}
-		});
 		
 		// txtDbFilePath
 		txtDbFilePath.setForeground(new Color(0, 0, 255));
 		txtDbFilePath.setToolTipText("Enter path store database");
-		txtDbFilePath.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e)
-			
-			{
-				;
-			}
-		
-			});
 		
 		// btnPerform
-		btnPerform.setBackground(new Color(204, 204, 204));
-		btnPerform.setForeground(new Color(0, 0, 255));
 		btnPerform.setText("Convert");
 		btnPerform.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) 
 			
 			{
+				 //insert database
 				 excuteConvert();
+			}
+			
+			});
+		// btnStop
+		btnStop.setText("Stop");
+		btnStop.setEnabled(false);
+		btnStop.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) 
+			
+			{
+				stop=true;
 			}
 			
 			});
 		
 		// btnIndexFileSelect
-		btnIndexFileSelect.setBackground(new Color(204, 204, 204));
-		btnIndexFileSelect.setForeground(new Color(0, 0, 255));
 		btnIndexFileSelect.setText("Browser...");
 		btnIndexFileSelect.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) 
@@ -155,8 +148,6 @@ public class ConvertData extends JFrame
 			
 			});
 		// btnDictFileSelect
-		btnDictFileSelect.setBackground(new Color(204, 204, 204));
-		btnDictFileSelect.setForeground(new Color(0, 0, 255));
 		btnDictFileSelect.setText("Browser...");
 		btnDictFileSelect.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) 
@@ -172,53 +163,38 @@ public class ConvertData extends JFrame
 			}
 			
 			});	
+		
 		// contentPane
-		
 		contentPane.setLayout(null);
-		
 		contentPane.setBorder(BorderFactory.createEtchedBorder());
-		
-		contentPane.setBackground(new Color(204, 204, 204));
-		
+		// add component for Frame
 		addComponent(contentPane, lblIndexFilePath, 35,10,126,18);
-		
 		addComponent(contentPane, lblDictFilePath, 35,47,126,18);
-		
 		addComponent(contentPane, txtSourceFilePath, 160,10,203,22);
-		
 		addComponent(contentPane, btnIndexFileSelect, 365,9,80,25);
-		
 		addComponent(contentPane, txtDbFilePath, 160,45,203,22);
-		
 		addComponent(contentPane, btnDictFileSelect, 365,44,80,25);
-		//lblDisplayProcess
-		
 		addComponent(contentPane, btnPerform, 160,75,90,30);
-		
+		addComponent(contentPane, btnStop, 250,75,90,30);
 		addComponent(contentPane, lblDisplayProcess, 35,110,200,18);
 	
+		//set title for program
 		this.setTitle("Convert data for TDict");
-		
 		// set icon for program
 		ImageIcon receivedIcon = new ImageIcon("resource\\images\\tri.png");
 		Image logoImg=receivedIcon.getImage();
-		
 		this.setIconImage(logoImg);
-		
+		//set position display
 		this.setLocation(new Point(400, 300));
-		
+		//set size display
 		this.setSize(new Dimension(500, 200));
-		
+		//set event close window
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
+		//set disable resizable
 		this.setResizable(false);
-		
-		this.setBackground(new Color(200));
-		
 	
 	}
 	
-	 
 	
 	/** Add Component Without a Layout Manager (Absolute Positioning) */
 	
@@ -230,9 +206,11 @@ public class ConvertData extends JFrame
 	}
 	public void excuteConvert()
 	{
-			
+		//set empty for display result run 
+		lblDisplayProcess.setText("");	
 	   	//name dictionary
 	   	String dictName=null;
+	   	// path to file
 	   	String sourceStorePath=txtSourceFilePath.getText();
 		String dbStorePath=txtDbFilePath.getText();
 		// path file source dictionary don't exits
@@ -279,12 +257,14 @@ public class ConvertData extends JFrame
 		}
 		else
 		{
+			// Folder don't include any file
 			JOptionPane.showMessageDialog(ConvertData.this,"Directory source dict have to include files: .idx,.dict and .ifo","Error",JOptionPane.ERROR_MESSAGE,null);
 			txtSourceFilePath.requestFocus();
 			return;
 		}
 		if(check<3)
 		{
+			// Folder don't include full file
 			JOptionPane.showMessageDialog(ConvertData.this,"Directory source dict have to include files: .idx,.dict and .ifo","Error",JOptionPane.ERROR_MESSAGE,null);
 			txtSourceFilePath.requestFocus();
 			return;
@@ -300,19 +280,28 @@ public class ConvertData extends JFrame
 	   	int idxFileSize=0;
 	   	try
 	   	{
+	   		// open stream read file
 	   		FileInputStream fstream=new FileInputStream(infoFilePath);
 	   		DataInputStream in = new DataInputStream(fstream);
 	   		BufferedReader  input = new BufferedReader (new InputStreamReader(in));
 	   		String strLine;
+	   		int k=0;
 	   	    //Read File Line By Line
 	   	    while ((strLine = input.readLine()) != null)   {
 	   	    	if (strLine.contains("idxfilesize="))
 	   	    	{
 	   	    		String valueStr=strLine.replaceAll("idxfilesize=", "");
 	   	    		idxFileSize = Integer.parseInt(valueStr.trim());
-	   	    		break;
-
-	   	    	}
+	   	    		k++;
+	   	       	}
+	   	    	if (strLine.contains("wordcount="))
+	   	    	{
+	   	    		String valueStr=strLine.replaceAll("wordcount=", "");
+	   	    		numberWord = Integer.parseInt(valueStr.trim());
+	   	    		k++;
+	   	       	}
+	   	    	if(k>1) break;
+   	  	
 	   	    }
 	   	    //Close the input stream
 	   	    input.close();
@@ -325,58 +314,132 @@ public class ConvertData extends JFrame
 	   	this.createData(dbStorePath,indexFilePath,dataFilePath,idxFileSize,dictName);
 		   
 	 }
+	
 	@SuppressWarnings("deprecation")
 	public void createData(String dbStorePath,String indexFilePath,String dataFilePath,int idxFileSize,String dictName){
-	        // Open connect database SQLite
+	   // Open connect database SQLite
 	   try
 	   {
+		  
+		    File checkFile = new File(dbStorePath+"\\"+dictName+".db");
+		   	if (checkFile.exists())
+		   	{
+		   		
+		   		result =JOptionPane.showConfirmDialog((ConvertData.this), "Are you override?", "Dupicate file!", JOptionPane.YES_NO_OPTION);
+		   		if (result==1) 
+		   		{
+		   			setActive();
+		   			return;	
+		   		}
+		   		else
+		   		{
+		   			boolean isDeleteSuccess=checkFile.delete();
+		   			if (!isDeleteSuccess)
+		   				{
+		   					JOptionPane.showMessageDialog(ConvertData.this,"Delete file unsuccessful. Please close program after run again. ","Error",JOptionPane.ERROR_MESSAGE,null);
+		   					setActive();
+				   			return;	
+		   				}
+		   				
+		   			
+		   		}
+		   	}
+		   
+		    //Disable controls before insert database
+			setUnActive();
 		    Class.forName("org.sqlite.JDBC");
 		    Connection conn = DriverManager.getConnection("jdbc:sqlite:"+dbStorePath+"\\"+dictName+".db");
-		    Statement st = conn.createStatement();
+		    final Statement st = conn.createStatement();
 		    // Create table and index
 		    st.executeUpdate("CREATE TABLE IF NOT EXISTS "+dictName+"(Word TEXT NOT NULL PRIMARY KEY, Content TEXT,Id INTEGER NOT NULL);");
 		    st.executeUpdate("CREATE INDEX wrod_idx ON "+dictName+"(Id);");
 		    // Read file
 	    	FileInputStream fileIndex=new FileInputStream(indexFilePath);
-	        BufferedInputStream input = new BufferedInputStream(fileIndex);
+	    	final BufferedInputStream input = new BufferedInputStream(fileIndex);
 	        // File content
 	        FileInputStream fileDict=new FileInputStream(dataFilePath);
-	        BufferedInputStream dictInput = new BufferedInputStream(fileDict);
+	        final BufferedInputStream dictInput = new BufferedInputStream(fileDict);
 	        // Array store data read form File index 
-	        byte[] data = new byte[idxFileSize];
+	        final byte[] data = new byte[idxFileSize];
 	        input.read(data);
-	        int start = 0;
-	        int j=0;
-			// Read data
-	        this.enable(false);
-	        for (int i = 0; i < data.length; i++) 
-	        {	
 	        
-	            if (data[i] == '\0') 
-	            {
-	            	//Read data form index
-	                int lengthOfData = i - start;
-	                byte[] tmp = new byte[lengthOfData];
-	                System.arraycopy(data, start, tmp, 0, lengthOfData);
-	                int length = byteArrayToInt(data, i+5);
-	                //Word 
-	                String word = new String(tmp, "UTF-8");
-	                //Read content from file data
-	                byte[] value = new byte[length];
-	                dictInput.read(value);
-	                //Content
-	                String content = new String(value,"UTF-8");
-	                i += 9;
-	                start = i;
-	            	//String message="Executing .... Insert Element "+j;
-	               	// insert into database
-	               	st.executeUpdate("INSERT INTO "+dictName+"(Word,Content,Id) VALUES ('"+Utility.encodeContent(word)+"','"+Utility.encodeContent(content)+"',"+j+")");
-	            	
-	            	j++;    
-	        	   
-	            }
-	        }
-	        this.enable(true);
+	        final String dictionName=dictName;
+	        countWord=0;
+			// Read data
+	        new Thread(new Runnable() {
+	    		   public void run() {
+	    		      for (int i=0; i < data.length; i++) 
+	    		      {
+	    		    	  if (data[i] == '\0') 
+	    		    	  {
+	    		    		  	try
+	    		    		  	{
+		    		    		  	//Read data form index
+		    		                int lengthOfData = i - start;
+		    		                byte[] tmp = new byte[lengthOfData];
+		    		                System.arraycopy(data, start, tmp, 0, lengthOfData);
+		    		                int length = byteArrayToInt(data, i+5);
+		    		                //Word 
+		    		                String word = new String(tmp, "UTF-8");
+		    		                //Read content from file data
+		    		                byte[] value = new byte[length];
+		    		                dictInput.read(value);
+		    		                //Content
+		    		                String content = new String(value,"UTF-8");
+		    		                i += 9;
+		    		                start = i;
+		    		               	// insert into database
+		    		               	st.executeUpdate("INSERT INTO "+dictionName+"(Word,Content,Id) VALUES ('"+Utility.encodeContent(word)+"','"+Utility.encodeContent(content)+"',"+countWord+")");
+		    		               	messageResult="Executing .... Insert Element "+countWord+"/"+numberWord;
+		    		               	countWord++; 
+		    		               	if (stop) 
+		    		               	{
+		    		               		setActive();
+		    		               		messageResult="Insert to be cancel";
+					    	  		  	i=data.length;
+					     	  		   	return;
+		    		               	}
+		    		               	
+	    		    		  	}
+	    		    		  	catch(Exception e) 
+			    		        {
+	    		    		  		; 
+			    		         }
+		    		          
+		    		          SwingUtilities.invokeLater(
+		    		        		 new Runnable() 
+		    		        		 {
+		    		        			 public void run() 
+		    		        			 { 
+		    		        				 lblDisplayProcess.setText(messageResult);
+		    		        			 }
+		    		        		 }
+		    		          );
+		    		          try 
+		    		          {
+		    		        	 Thread.sleep(1000); 
+		    		        
+		    		          } catch(Exception e) 
+		    		          {
+		    		        	; 
+		    		          }
+	    		    	  }
+	    		    
+	    		      }
+	    		      try
+	    		      {
+		    		      setActive();
+		    		      lblDisplayProcess.setText("Create database success! ");
+	    		      }
+	    		      catch(Exception e) 
+    		          {
+	    		        	; 
+	    		      }
+	    		      ///
+	    		    }
+	    		}).start();
+	       
+      
 	   }catch(Exception e)
 	   {
 		   e.printStackTrace();
@@ -393,9 +456,39 @@ public class ConvertData extends JFrame
         }
         return value;
     } 
+    public void updateControl() throws Throwable
+    {
+       	      for (int i=0; i<100; i++) {
+    	         System.out.println("thread "
+    	            +Thread.currentThread().getName()+" step "+i);
+    	         Thread.sleep(500);
+    	      }
+  	
+    }
+    public final  void setActive()
+    {
+    	 //set for control enable
+  	 	 txtDbFilePath.setEnabled(true);
+	  	 txtSourceFilePath.setEnabled(true);
+	     btnIndexFileSelect.setEnabled(true);
+	  	 btnDictFileSelect.setEnabled(true);
+	  	 btnPerform.setEnabled(true);
+	  	 btnStop.setEnabled(false);
+    }
+    public final void setUnActive()
+    {
+    	//set for control disable
+  	 	 txtDbFilePath.setEnabled(false);
+	  	 txtSourceFilePath.setEnabled(false);
+	     btnIndexFileSelect.setEnabled(false);
+	  	 btnDictFileSelect.setEnabled(false);
+	  	 btnPerform.setEnabled(false);
+	  	 btnStop.setEnabled(true);
+    }
 	public static void main(String[] args)
 	
 	{
+		//set Look and Feel
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		JDialog.setDefaultLookAndFeelDecorated(true);
 		try
@@ -407,9 +500,9 @@ public class ConvertData extends JFrame
 			System.out.println("Failed loading L&F: ");
 			System.out.println(ex);
 		}
-		
+		//perform run program convert data for TDict
 		new ConvertData();
 		
 		};
-	
+		
 }
