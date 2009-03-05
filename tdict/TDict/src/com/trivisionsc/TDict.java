@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -711,6 +712,7 @@ public class TDict extends Activity  {
 	public void loadForManageDictionary()
 	{
 		 // create layout for display 
+		 ScrollView sv = new ScrollView(this); 
 		 layout=new LinearLayout(getApplicationContext());
 	     //add content
      	 radiogroup= new RadioGroup(this);
@@ -733,10 +735,11 @@ public class TDict extends Activity  {
 	      	  //layout
          	  layout.addView(radiogroup);
      	 }
-   	
-   	      AlertDialog.Builder dialog=new AlertDialog.Builder(TDict.this).setIcon(
+     	 sv.setVerticalScrollBarEnabled(true); 
+     	 sv.addView(layout); 
+     	 AlertDialog.Builder dialog=new AlertDialog.Builder(TDict.this).setIcon(
 	  				R.drawable.manage).setTitle("Select a dictionary")
-	  				.setView(layout).setPositiveButton("OK",
+	  				.setView(sv).setPositiveButton("OK",
 	  						new DialogInterface.OnClickListener() {
 	  							public void onClick(DialogInterface dialog,
 	  									int whichButton) {
