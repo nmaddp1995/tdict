@@ -87,7 +87,8 @@ public class ConvertData extends JFrame
 	   	contentPane = (JPanel)this.getContentPane();
 	    fc = new JFileChooser();
 	    fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-     	//lblIndexFilePath
+     	//lblDisplayProcess
+	    lblDisplayProcess.setForeground(new Color(255, 0, 0));
 		lblDisplayProcess.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		//lblIndexFilePath
@@ -176,7 +177,7 @@ public class ConvertData extends JFrame
 		addComponent(contentPane, btnDictFileSelect, 365,44,80,25);
 		addComponent(contentPane, btnPerform, 160,75,90,30);
 		addComponent(contentPane, btnStop, 250,75,90,30);
-		addComponent(contentPane, lblDisplayProcess, 35,110,200,18);
+		addComponent(contentPane, lblDisplayProcess, 35,110,250,18);
 	
 		//set title for program
 		this.setTitle("Convert data for TDict");
@@ -190,7 +191,7 @@ public class ConvertData extends JFrame
 		this.setSize(new Dimension(500, 200));
 		//set event close window
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		//set disable resizable
+		//set disable resize
 		this.setResizable(false);
 	
 	}
@@ -215,9 +216,11 @@ public class ConvertData extends JFrame
 		String dbStorePath=txtDbFilePath.getText();
 		// path file source dictionary don't exits
 		File directorySource = new File(sourceStorePath);  
+		
+		// path file source dictionary don't exits
 		if (sourceStorePath==null || sourceStorePath.equals("")||!directorySource.exists())
 		{
-			JOptionPane.showMessageDialog(ConvertData.this,"Please select path for source dict store directory","Error",JOptionPane.ERROR_MESSAGE,null);
+			JOptionPane.showMessageDialog(ConvertData.this,"Path is invalid!","Error",JOptionPane.ERROR_MESSAGE,null);
 			txtSourceFilePath.requestFocus();
 			return;
 		}
@@ -226,17 +229,11 @@ public class ConvertData extends JFrame
 		File directoryDb = new File(dbStorePath);  
 		if (dbStorePath==null || dbStorePath.equals("")||!directoryDb.exists())
 		{
-			JOptionPane.showMessageDialog(ConvertData.this,"Please select path for database store directory","Error",JOptionPane.ERROR_MESSAGE,null);
+			JOptionPane.showMessageDialog(ConvertData.this,"Path is invalid!","Error",JOptionPane.ERROR_MESSAGE,null);
 			txtDbFilePath.requestFocus();
 			return;
 		}	
-		// path file source dictionary don't exits
-		if (sourceStorePath==null || sourceStorePath.equals(""))
-		{
-			JOptionPane.showMessageDialog(ConvertData.this,"Please select path for source dict store directory","Error",JOptionPane.ERROR_MESSAGE,null);
-			return;
-		}
-		
+				
 		// check in source directory include: file index,dictionary and information?
 		File[] files = directorySource.listFiles();  
 		int check=0;
@@ -258,14 +255,14 @@ public class ConvertData extends JFrame
 		else
 		{
 			// Folder don't include any file
-			JOptionPane.showMessageDialog(ConvertData.this,"Directory source dict have to include files: .idx,.dict and .ifo","Error",JOptionPane.ERROR_MESSAGE,null);
+			JOptionPane.showMessageDialog(ConvertData.this,"Source directory have to include files: .idx,.dict and .ifo","Error",JOptionPane.ERROR_MESSAGE,null);
 			txtSourceFilePath.requestFocus();
 			return;
 		}
 		if(check<3)
 		{
 			// Folder don't include full file
-			JOptionPane.showMessageDialog(ConvertData.this,"Directory source dict have to include files: .idx,.dict and .ifo","Error",JOptionPane.ERROR_MESSAGE,null);
+			JOptionPane.showMessageDialog(ConvertData.this,"Source directory have to include files: .idx,.dict and .ifo","Error",JOptionPane.ERROR_MESSAGE,null);
 			txtSourceFilePath.requestFocus();
 			return;
 		}
@@ -308,7 +305,9 @@ public class ConvertData extends JFrame
 	   	}
 	   	catch(Exception e)
 	   	{
-	   		e.printStackTrace();
+	   		JOptionPane.showMessageDialog(ConvertData.this,"System error!Please try again","Error",JOptionPane.ERROR_MESSAGE,null);
+			setActive();
+   			return;	
 	   	}
 	   	// perform convert
 	   	this.createData(dbStorePath,indexFilePath,dataFilePath,idxFileSize,dictName);
@@ -325,7 +324,7 @@ public class ConvertData extends JFrame
 		   	if (checkFile.exists())
 		   	{
 		   		
-		   		result =JOptionPane.showConfirmDialog((ConvertData.this), "Are you override?", "Dupicate file!", JOptionPane.YES_NO_OPTION);
+		   		result =JOptionPane.showConfirmDialog((ConvertData.this), "Are you sure to overwrite?", "File existed!", JOptionPane.YES_NO_OPTION);
 		   		if (result==1) 
 		   		{
 		   			setActive();
@@ -336,7 +335,7 @@ public class ConvertData extends JFrame
 		   			boolean isDeleteSuccess=checkFile.delete();
 		   			if (!isDeleteSuccess)
 		   				{
-		   					JOptionPane.showMessageDialog(ConvertData.this,"Delete file unsuccessful. Please close program after run again. ","Error",JOptionPane.ERROR_MESSAGE,null);
+		   					JOptionPane.showMessageDialog(ConvertData.this,"Delete file unsuccessfully. Please restart program. ","Error",JOptionPane.ERROR_MESSAGE,null);
 		   					setActive();
 				   			return;	
 		   				}
@@ -390,15 +389,15 @@ public class ConvertData extends JFrame
 		    		                start = i;
 		    		               	// insert into database
 		    		               	st.executeUpdate("INSERT INTO "+dictionName+"(Word,Content,Id) VALUES ('"+Utility.encodeContent(word)+"','"+Utility.encodeContent(content)+"',"+countWord+")");
-		    		               	messageResult="Executing .... Insert Element "+countWord+"/"+numberWord;
+		    		               	messageResult="Executing .... Insert element "+countWord+"/"+numberWord;
 		    		               	countWord++; 
 		    		               	if (stop) 
 		    		               	{
 		    		               		setActive();
-		    		               		messageResult="Insert to be cancel";
+		    		               		messageResult="Cancel";
 					    	  		  	i=data.length;
-					     	  		   	return;
-		    		               	}
+					    	  		  	st.close();
+					               	}
 		    		               	
 	    		    		  	}
 	    		    		  	catch(Exception e) 
@@ -417,23 +416,31 @@ public class ConvertData extends JFrame
 		    		          );
 		    		          try 
 		    		          {
-		    		        	 Thread.sleep(1000); 
+		    		        	 Thread.sleep(1); 
 		    		        
 		    		          } catch(Exception e) 
 		    		          {
-		    		        	; 
+		    		        	  JOptionPane.showMessageDialog(ConvertData.this,"System error!Please try again","Error",JOptionPane.ERROR_MESSAGE,null);
+		    		  			  setActive();
+		    		     		  return;
 		    		          }
 	    		    	  }
 	    		    
 	    		      }
 	    		      try
 	    		      {
-		    		      setActive();
-		    		      lblDisplayProcess.setText("Create database success! ");
+	    		    	  if(!stop&&countWord==numberWord)
+		    		      {
+	    		    		  setActive();
+		    		          lblDisplayProcess.setText("Completed! ");
+		    		          st.close();
+		    		      }
 	    		      }
 	    		      catch(Exception e) 
     		          {
-	    		        	; 
+	    		    	  JOptionPane.showMessageDialog(ConvertData.this,"System error!Please try again","Error",JOptionPane.ERROR_MESSAGE,null);
+    		  			  setActive();
+    		     		  return;
 	    		      }
 	    		      ///
 	    		    }
@@ -442,7 +449,9 @@ public class ConvertData extends JFrame
       
 	   }catch(Exception e)
 	   {
-		   e.printStackTrace();
+		   JOptionPane.showMessageDialog(ConvertData.this,"System error!Please try again","Error",JOptionPane.ERROR_MESSAGE,null);
+		   setActive();
+  		   return;
 	   }
           
     }
