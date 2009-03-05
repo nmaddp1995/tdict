@@ -369,16 +369,17 @@ public class TDict extends Activity  {
 		
 		File dataDirectory = new File(pathFileData);
         File[] listFile=dataDirectory.listFiles();
-        for (File currentFile : listFile)
-        {
-        if (currentFile.isFile()&&currentFile.getName().contains(formatFileData))
-        {
-        	String nameFullFile=currentFile.getName();
-          	int index=nameFullFile.indexOf(formatFileData);
-          	String nameFile=nameFullFile.substring(0, index);
-          	list.add(nameFile);
-        }
-        }
+        if (listFile!=null && listFile.length>0)
+	        for (File currentFile : listFile)
+	        {
+		        if (currentFile.isFile()&&currentFile.getName().contains(formatFileData))
+		        {
+		        	String nameFullFile=currentFile.getName();
+		          	int index=nameFullFile.indexOf(formatFileData);
+		          	String nameFile=nameFullFile.substring(0, index);
+		          	list.add(nameFile);
+		        }
+	        }
         
         return list;			
 	}
@@ -462,14 +463,14 @@ public class TDict extends Activity  {
 	        btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
 	       	// Open Database
 	       	ArrayList<String> listFileDb=getDataFileArray();
-	       	if (listFileDb.size()>0)
+	       	if (listFileDb!=null&&listFileDb.size()>0)
 	       	{
 	   	       	String defalutDbName=listFileDb.get(1);
 	   	       	if(isInit)
 	   	       		selectedDb=defalutDbName;
 		       	String pathFileData=getResources().getString(R.string.path_file_data);
 		       	String fullPathFile=pathFileData+"/"+selectedDb+".db";
-		       	nameDb=SQLiteDatabase.openDatabase(fullPathFile, null, SQLiteDatabase.OPEN_READONLY);
+		       	nameDb=SQLiteDatabase.openDatabase(fullPathFile, null, 0);
 		        // Initialize for List View
 		    	setDataForListView(selectedDb);
 	       	}
@@ -749,7 +750,7 @@ public class TDict extends Activity  {
 		  									input.setText("");
 		  									String pathFileData=getResources().getString(R.string.path_file_data);
 		  							       	String fullPathFile=pathFileData+"/"+selectedDb+".db";
-		  							       	nameDb=SQLiteDatabase.openDatabase(fullPathFile, null, 1);
+		  							       	nameDb=SQLiteDatabase.openDatabase(fullPathFile, null, 0);
 		  									setDataForListView(selectedDb);
 		  								}
 	  								}
@@ -771,6 +772,7 @@ public class TDict extends Activity  {
 	  				});
    	  dialog.show();
 	}
+	//Load For About
 	public void loadForAbout()
 	{
 		 
