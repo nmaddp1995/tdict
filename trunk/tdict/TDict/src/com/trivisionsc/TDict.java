@@ -122,7 +122,7 @@ public class TDict extends Activity  {
 	  // force the extended menu to appear.
 	  menu.add(groupId, menuItemId+0, menuItemOrder, "Dictionary").setIcon(R.drawable.dictmenu);
 	  menu.add(groupId, menuItemId+2, menuItemOrder, "Google Translate").setIcon(R.drawable.google);
-	  menu.add(groupId, menuItemId+1, menuItemOrder, "Manage Dictionary").setIcon(R.drawable.manage);
+	  menu.add(groupId, menuItemId+1, menuItemOrder, "Options").setIcon(R.drawable.manage);
 	  menu.add(groupId, menuItemId+3, menuItemOrder, "About").setIcon(R.drawable.info);
 	 
 	  return true;
@@ -710,13 +710,14 @@ public class TDict extends Activity  {
 	// Load For ManageDictionary
 	public void loadForManageDictionary()
 	{
+		 // create layout for display 
 		 layout=new LinearLayout(getApplicationContext());
-   	     //Set
-     	  radiogroup= new RadioGroup(this);
-     	  listFileDb=getDataFileArray();
-     	  int indexSelected=-1;
-     	  if (listFileDb!=null && listFileDb.size()>0)
-     	  {
+	     //add content
+     	 radiogroup= new RadioGroup(this);
+     	 listFileDb=getDataFileArray();
+     	 int indexSelected=-1;
+     	 if (listFileDb!=null && listFileDb.size()>0)
+     	 {
 	      	  for (int i=0;i<listFileDb.size();i++)
 	      	  {
 	      		  
@@ -728,10 +729,10 @@ public class TDict extends Activity  {
 				  radiogroup.addView(radio, i);
 	      		  
 	          }
-	      	  
 	      	  radiogroup.check(indexSelected);
+	      	  //layout
          	  layout.addView(radiogroup);
-     	  }
+     	 }
    	
    	      AlertDialog.Builder dialog=new AlertDialog.Builder(TDict.this).setIcon(
 	  				R.drawable.manage).setTitle("Select a dictionary")
@@ -771,6 +772,7 @@ public class TDict extends Activity  {
 	  					}
 	  				});
    	  dialog.show();
+   	  
 	}
 	//Load For About
 	public void loadForAbout()

@@ -36,6 +36,7 @@ public final class R {
         public static final int edtDestinationInput=0x7f060005;
         public static final int edtSourceInput=0x7f060002;
         public static final int listResult=0x7f06000d;
+        public static final int radioGroup=0x7f06000e;
         public static final int spnDestinationLanguages=0x7f060003;
         public static final int spnSourceLanguages=0x7f060000;
         public static final int textView=0x7f06000c;
@@ -46,7 +47,8 @@ public final class R {
         public static final int google_translate=0x7f030001;
         public static final int main=0x7f030002;
         public static final int message_err=0x7f030003;
-        public static final int todolist_item=0x7f030004;
+        public static final int scroll=0x7f030004;
+        public static final int todolist_item=0x7f030005;
     }
     public static final class string {
         public static final int about_text=0x7f050003;
